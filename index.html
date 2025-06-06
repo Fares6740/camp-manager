@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camp Manager - Gestion de Groupe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'bounce-slow': 'bounce 3s infinite',
+                        'pulse-slow': 'pulse 4s infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px) scale(1.02); }
+        .glass { backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.9); }
+        .icon { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; fill: none; }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-emerald-50 via-cyan-50 to-blue-100">
+    <!-- Décoration de fond -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-10 left-10 text-6xl opacity-5 animate-bounce-slow">🏕️</div>
+        <div class="absolute top-32 right-20 text-4xl opacity-5 animate-pulse-slow">🔥</div>
+        <div class="absolute bottom-20 left-20 text-5xl opacity-5 animate-bounce-slow">⭐</div>
+        <div class="absolute bottom-10 right-10 text-3xl opacity-5 animate-pulse-slow">🌲</div>
+    </div>
+
+    <div class="max-w-6xl mx-auto p-4 relative z-10">
+        <div class="glass rounded-2xl shadow-2xl overflow-hidden border border-white/20">
+            <!-- Header Premium -->
+            <div class="relative gradient-bg text-white p-8">
+                <div class="absolute inset-0">
+                    <div class="absolute inset-0 bg-black/10"></div>
+                    <div class="absolute top-4 right-4 text-white/20">
+                        <svg class="w-16 h-16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M3 20h18l-9-15-9 15Z"/>
+                            <path d="M8.5 12h7"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="relative z-10">
+                    <div class="flex items-center gap-4">
+                        <div class="bg-white/20 p-3 rounded-xl">
+                            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="text-4xl font-bold">Camp Manager</h1>
+                            <p class="text-emerald-100 mt-1 text-lg">Vos vacances camping, organisées comme des pros</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats rapides -->
+                    <div class="mt-6 grid grid-cols-3 gap-4">
+                        <div class="bg-white/10 backdrop-blur-sm rounded-lg p-3 text-center">
+                            <div class="text-2xl font-bold" id="stats-expenses">3</div>
+                            <div class="text-emerald-100 text-sm">Dépenses</div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm rounded-lg p-3 text-center">
+                            <div class="text-2xl font-bold" id="stats-tasks">3</div>
+                            <div class="text-emerald-100 text-sm">Tâches restantes</div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm rounded-lg p-3 text-center">
+                            <div class="text-2xl font-bold" id="stats-total">248€</div>
+                            <div class="text-emerald-100 text-sm">Total dépensé</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Premium -->
+            <div class="flex border-b border-gray-100 bg-white/50">
+                <button onclick="switchTab('expenses')" id="tab-expenses" class="tab-button flex-1 py-5 px-6 flex items-center justify-center gap-3 font-semibold transition-all duration-300 bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg">
+                    <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                    Frais Partagés
+                </button>
+                <button onclick="switchTab('tasks')" id="tab-tasks" class="tab-button flex-1 py-5 px-6 flex items-center justify-center gap-3 font-semibold transition-all duration-300 text-gray-600 hover:bg-emerald-50 hover:text-emerald-600">
+                    <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    Planning
+                </button>
+                <button onclick="switchTab('balance')" id="tab-balance" class="tab-button flex-1 py-5 px-6 flex items-center justify-center gap-3 font-semibold transition-all duration-300 text-gray-600 hover:bg-emerald-50 hover:text-emerald-600">
+                    <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    Équilibrage
+                </button>
+            </div>
+
+            <!-- Contenu -->
+            <div class="p-8">
+                <!-- Onglet Frais Partagés -->
+                <div id="content-expenses" class="tab-content">
+                    <!-- Ajout de dépense Premium -->
+                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-6 rounded-2xl border border-gray-200 shadow-inner mb-8">
+                        <h3 class="font-bold text-xl mb-6 flex items-center gap-3 text-gray-800">
+                            <div class="bg-emerald-500 p-2 rounded-lg">
+                                <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            </div>
+                            Nouvelle dépense
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+                            <input type="text" id="new-expense-desc" placeholder="Description" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 bg-white shadow-sm">
+                            <input type="number" id="new-expense-amount" step="0.01" placeholder="Montant €" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 bg-white shadow-sm">
+                            <select id="new-expense-payer" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 bg-white shadow-sm">
+                                <option value="">Payé par...</option>
+                                <option value="1">🧑‍💻 Farès</option>
+                                <option value="2">🎯 Anis</option>
+                                <option value="3">🎸 Anthonin</option>
+                                <option value="4">🎮 Quentin</option>
+                                <option value="5">⚽ Natan</option>
+                                <option value="6">🎨 Raphael</option>
+                            </select>
+                            <select id="new-expense-category" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 bg-white shadow-sm">
+                                <option value="🛒">🛒 Courses</option>
+                                <option value="⛽">⛽ Essence</option>
+                                <option value="🍺">🍺 Boissons</option>
+                                <option value="🍕">🍕 Restaurant</option>
+                                <option value="🎪">🎪 Activités</option>
+                                <option value="🏊">🏊 Loisirs</option>
+                                <option value="🎯">🎯 Jeux</option>
+                                <option value="🔧">🔧 Matériel</option>
+                            </select>
+                            <div class="md:col-span-2">
+                                <button onclick="addExpense()" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-3 rounded-xl hover:from-emerald-700 hover:to-teal-700 transition-all duration-200 flex items-center justify-center gap-2 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                    Ajouter la dépense
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Liste des dépenses -->
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-xl flex items-center gap-2 text-gray-800">
+                            <svg class="w-6 h-6 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2"/></svg>
+                            Historique des dépenses
+                        </h3>
+                        <div id="expenses-list"></div>
+                    </div>
+                </div>
+
+                <!-- Onglet Tâches -->
+                <div id="content-tasks" class="tab-content hidden">
+                    <!-- Ajout de tâche Premium -->
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-200 shadow-inner mb-8">
+                        <h3 class="font-bold text-xl mb-6 flex items-center gap-3 text-gray-800">
+                            <div class="bg-blue-500 p-2 rounded-lg">
+                                <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            </div>
+                            Nouvelle tâche
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+                            <input type="text" id="new-task-title" placeholder="Titre de la tâche" class="md:col-span-2 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white shadow-sm">
+                            <select id="new-task-assignee" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white shadow-sm">
+                                <option value="">Assigné à...</option>
+                                <option value="1">🧑‍💻 Farès</option>
+                                <option value="2">🎯 Anis</option>
+                                <option value="3">🎸 Anthonin</option>
+                                <option value="4">🎮 Quentin</option>
+                                <option value="5">⚽ Natan</option>
+                                <option value="6">🎨 Raphael</option>
+                            </select>
+                            <select id="new-task-type" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white shadow-sm">
+                                <option value="meal">🍳 Repas</option>
+                                <option value="cleaning">🧹 Ménage</option>
+                                <option value="shopping">🛒 Courses</option>
+                                <option value="other">🏕️ Autre</option>
+                            </select>
+                            <input type="date" id="new-task-date" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white shadow-sm">
+                            <button onclick="addTask()" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 flex items-center justify-center gap-2 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Ajouter
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Liste des tâches -->
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-xl flex items-center gap-2 text-gray-800">
+                            <svg class="w-6 h-6 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            Planning des missions
+                        </h3>
+                        <div id="tasks-list"></div>
+                    </div>
+                </div>
+
+                <!-- Onglet Balance -->
+                <div id="content-balance" class="tab-content hidden">
+                    <h3 class="font-bold text-2xl flex items-center gap-3 text-gray-800 mb-8">
+                        <svg class="w-7 h-7 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                        Tableau de bord financier
+                    </h3>
+                    
+                    <!-- Résumé des balances -->
+                    <div id="balances-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"></div>
+
+                    <!-- Suggestions de remboursement -->
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-2xl border border-blue-200 shadow-inner">
+                        <h4 class="font-bold text-xl mb-6 text-blue-800 flex items-center gap-3">
+                            <div class="bg-blue-500 p-2 rounded-lg">
+                                <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                            </div>
+                            💡 Plan de remboursement optimisé
+                        </h4>
+                        <div id="reimbursement-suggestions"></div>
+
+                        <!-- Statistiques bonus -->
+                        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-gradient-to-br from-purple-500 to-pink-500 text-white p-4 rounded-xl shadow-lg text-center">
+                                <div class="text-2xl font-bold" id="total-trip">0€</div>
+                                <div class="text-purple-100">Total du voyage</div>
+                            </div>
+                            <div class="bg-gradient-to-br from-orange-500 to-red-500 text-white p-4 rounded-xl shadow-lg text-center">
+                                <div class="text-2xl font-bold" id="avg-person">0€</div>
+                                <div class="text-orange-100">Moyenne par personne</div>
+                            </div>
+                            <div class="bg-gradient-to-br from-teal-500 to-cyan-500 text-white p-4 rounded-xl shadow-lg text-center">
+                                <div class="text-2xl font-bold" id="max-imbalance">0€</div>
+                                <div class="text-teal-100">Plus gros déséquilibre</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bouton Reset et Footer -->
+        <div class="text-center mt-8 space-y-4">
+            <button onclick="resetAllData()" class="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center gap-2 mx-auto">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polyline points="1,4 1,10 7,10"/>
+                    <path d="M3.51,15a9,9,0,0,0,13.98,0"/>
+                    <polyline points="23,20 23,14 17,14"/>
+                    <path d="M20.49,9a9,9,0,0,0-13.98,0"/>
+                </svg>
+                🗑️ Remettre à zéro
+            </button>
+            <div class="text-gray-500">
+                <p class="flex items-center justify-center gap-2">
+                    Made with <span class="text-red-500">❤️</span> for an epic camping trip 
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 20h18l-9-15-9 15Z"/><path d="M8.5 12h7"/></svg>
+                </p>
+                <p class="text-sm mt-2 text-gray-400">💾 Données sauvegardées automatiquement</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ====== SYSTÈME DE DONNÉES PERSISTANTES ======
+        
+        // Clés de stockage localStorage
+        const STORAGE_KEYS = {
+            FRIENDS: 'camp-manager-friends',
+            EXPENSES: 'camp-manager-expenses',
+            TASKS: 'camp-manager-tasks'
+        };
+
+        // Fonction pour sauvegarder les données
+        function saveData() {
+            try {
+                localStorage.setItem(STORAGE_KEYS.FRIENDS, JSON.stringify(friends));
+                localStorage.setItem(STORAGE_KEYS.EXPENSES, JSON.stringify(expenses));
+                localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
+                console.log('💾 Données sauvegardées !');
+            } catch (error) {
+                console.error('❌ Erreur lors de la sauvegarde:', error);
+            }
+        }
+
+        // Fonction pour charger les données
+        function loadData() {
+            try {
+                const savedFriends = localStorage.getItem(STORAGE_KEYS.FRIENDS);
+                const savedExpenses = localStorage.getItem(STORAGE_KEYS.EXPENSES);
+                const savedTasks = localStorage.getItem(STORAGE_KEYS.TASKS);
+
+                if (savedFriends) {
+                    friends = JSON.parse(savedFriends);
+                }
+                if (savedExpenses) {
+                    expenses = JSON.parse(savedExpenses);
+                }
+                if (savedTasks) {
+                    tasks = JSON.parse(savedTasks);
+                }
+                console.log('✅ Données chargées !');
+            } catch (error) {
+                console.error('❌ Erreur lors du chargement:', error);
+                // En cas d'erreur, on garde les données par défaut
+            }
+        }
+
+        // Fonction pour remettre à zéro toutes les données
+        function resetAllData() {
+            const confirmation = confirm('🚨 ATTENTION ! Êtes-vous sûr de vouloir remettre à zéro toutes les données ?\n\n💥 Cela supprimera définitivement :\n• Toutes les dépenses\n• Toutes les tâches\n• Tout l\'historique\n\nCette action est irréversible !');
+            
+            if (confirmation) {
+                const doubleConfirmation = confirm('🔥 DERNIÈRE CHANCE !\n\nTapez "OUI" si vous êtes vraiment sûr de vouloir TOUT supprimer !');
+                
+                if (doubleConfirmation) {
+                    try {
+                        // Supprimer du localStorage
+                        localStorage.removeItem(STORAGE_KEYS.FRIENDS);
+                        localStorage.removeItem(STORAGE_KEYS.EXPENSES);
+                        localStorage.removeItem(STORAGE_KEYS.TASKS);
+
+                        // Remettre les données par défaut
+                        friends = [
+                            { id: 1, name: 'Farès', color: 'bg-gradient-to-br from-blue-400 to-blue-600', avatar: '🧑‍💻' },
+                            { id: 2, name: 'Anis', color: 'bg-gradient-to-br from-pink-400 to-pink-600', avatar: '🎯' },
+                            { id: 3, name: 'Anthonin', color: 'bg-gradient-to-br from-green-400 to-green-600', avatar: '🎸' },
+                            { id: 4, name: 'Quentin', color: 'bg-gradient-to-br from-purple-400 to-purple-600', avatar: '🎮' },
+                            { id: 5, name: 'Natan', color: 'bg-gradient-to-br from-orange-400 to-orange-600', avatar: '⚽' },
+                            { id: 6, name: 'Raphael', color: 'bg-gradient-to-br from-red-400 to-red-600', avatar: '🎨' }
+                        ];
+
+                        expenses = [
+                            { id: 1, description: 'Courses Carrefour', amount: 85.50, paidBy: 1, date: '2025-06-06', participants: [1, 2, 3, 4, 5, 6], category: '🛒' },
+                            { id: 2, description: 'Essence aller', amount: 120.00, paidBy: 2, date: '2025-06-06', participants: [1, 2, 3, 4, 5, 6], category: '⛽' },
+                            { id: 3, description: 'Bières & snacks', amount: 42.30, paidBy: 3, date: '2025-06-06', participants: [1, 2, 3, 4, 5, 6], category: '🍺' }
+                        ];
+
+                        tasks = [
+                            { id: 1, title: 'Petit déjeuner samedi', assignedTo: 1, date: '2025-06-07', completed: false, type: 'meal', priority: 'high' },
+                            { id: 2, title: 'Ranger la tente', assignedTo: 3, date: '2025-06-06', completed: true, type: 'cleaning', priority: 'medium' },
+                            { id: 3, title: 'Courses dimanche', assignedTo: 2, date: '2025-06-08', completed: false, type: 'shopping', priority: 'high' },
+                            { id: 4, title: 'Barbecue soir', assignedTo: 5, date: '2025-06-07', completed: false, type: 'meal', priority: 'high' },
+                            { id: 5, title: 'Feu de camp', assignedTo: 6, date: '2025-06-07', completed: false, type: 'other', priority: 'medium' }
+                        ];
+
+                        // Sauvegarder et mettre à jour l'affichage
+                        saveData();
+                        updateExpensesList();
+                        updateTasksList();
+                        updateStats();
+                        if (document.getElementById('content-balance').style.display !== 'none') {
+                            updateBalanceTab();
+                        }
+
+                        // Notification de succès
+                        alert('🎉 Remise à zéro effectuée avec succès !\n\n✅ Toutes les données ont été supprimées\n🔄 Les données d\'exemple ont été restaurées\n💾 Prêt pour un nouveau voyage !');
+                        
+                        console.log('🔄 Reset complet effectué !');
+                    } catch (error) {
+                        console.error('❌ Erreur lors du reset:', error);
+                        alert('❌ Erreur lors de la remise à zéro. Veuillez rafraîchir la page.');
+                    }
+                } else {
+                    alert('😌 Annulé ! Vos données sont en sécurité.');
+                }
+            } else {
+                alert('😌 Annulé ! Vos données sont en sécurité.');
+            }
+        }
+
+        // Données par défaut (utilisées aussi pour le reset)
+        let friends = [
+            { id: 1, name: 'Farès', color: 'bg-gradient-to-br from-blue-400 to-blue-600', avatar: '🧑‍💻' },
+            { id: 2, name: 'Anis', color: 'bg-gradient-to-br from-pink-400 to-pink-600', avatar: '🎯' },
+            { id: 3, name: 'Anthonin', color: 'bg-gradient-to-br from-green-400 to-green-600', avatar: '🎸' },
+            { id: 4, name: 'Quentin', color: 'bg-gradient-to-br from-purple-400 to-purple-600', avatar: '🎮' },
+            { id: 5, name: 'Natan', color: 'bg-gradient-to-br from-orange-400 to-orange-600', avatar: '⚽' },
+            { id: 6, name: 'Raphael', color: 'bg-gradient-to-br from-red-400 to-red-600', avatar: '🎨' }
+        ];
+
+        let expenses = [
+            { id: 1, description: 'Courses Carrefour', amount: 85.50, paidBy: 1, date: '2025-06-06', participants: [1, 2, 3, 4, 5, 6], category: '🛒' },
+            { id: 2, description: 'Essence aller', amount: 120.00, paidBy: 2, date: '2025-06-06', participants: [1, 2, 3, 4, 5, 6], category: '⛽' },
+            { id: 3, description: 'Bières & snacks', amount: 42.30, paidBy: 3, date: '2025-06-06', participants: [1, 2, 3, 4, 5, 6], category: '🍺' }
+        ];
+
+        let tasks = [
+            { id: 1, title: 'Petit déjeuner samedi', assignedTo: 1, date: '2025-06-07', completed: false, type: 'meal', priority: 'high' },
+            { id: 2, title: 'Ranger la tente', assignedTo: 3, date: '2025-06-06', completed: true, type: 'cleaning', priority: 'medium' },
+            { id: 3, title: 'Courses dimanche', assignedTo: 2, date: '2025-06-08', completed: false, type: 'shopping', priority: 'high' },
+            { id: 4, title: 'Barbecue soir', assignedTo: 5, date: '2025-06-07', completed: false, type: 'meal', priority: 'high' },
+            { id: 5, title: 'Feu de camp', assignedTo: 6, date: '2025-06-07', completed: false, type: 'other', priority: 'medium' }
+        ];
+
+        // Fonctions utilitaires
+        function getFriendName(id) {
+            return friends.find(f => f.id === id)?.name || 'Inconnu';
+        }
+
+        function getFriendColor(id) {
+            return friends.find(f => f.id === id)?.color || 'bg-gray-500';
+        }
+
+        function getFriendAvatar(id) {
+            return friends.find(f => f.id === id)?.avatar || '👤';
+        }
+
+        const taskIcons = {
+            meal: '🍳',
+            cleaning: '🧹',
+            shopping: '🛒',
+            other: '🏕️'
+        };
+
+        const priorityColors = {
+            high: 'border-l-red-500 bg-red-50',
+            medium: 'border-l-yellow-500 bg-yellow-50',
+            low: 'border-l-green-500 bg-green-50'
+        };
+
+        // Navigation entre onglets
+        function switchTab(tabName) {
+            // Cacher tous les contenus
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+
+            // Retirer la classe active de tous les boutons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.className = 'tab-button flex-1 py-5 px-6 flex items-center justify-center gap-3 font-semibold transition-all duration-300 text-gray-600 hover:bg-emerald-50 hover:text-emerald-600';
+            });
+
+            // Afficher le contenu sélectionné
+            document.getElementById(`content-${tabName}`).classList.remove('hidden');
+
+            // Activer le bouton sélectionné
+            document.getElementById(`tab-${tabName}`).className = 'tab-button flex-1 py-5 px-6 flex items-center justify-center gap-3 font-semibold transition-all duration-300 bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg';
+
+            // Mettre à jour le contenu si nécessaire
+            if (tabName === 'balance') {
+                updateBalanceTab();
+            }
+        }
+
+        // Calcul des balances
+        function calculateBalances() {
+            const balances = {};
+            friends.forEach(friend => {
+                balances[friend.id] = { paid: 0, owes: 0, balance: 0 };
+            });
+
+            expenses.forEach(expense => {
+                const payer = expense.paidBy;
+                const participantCount = expense.participants.length;
+                const amountPerPerson = expense.amount / participantCount;
+
+                balances[payer].paid += expense.amount;
+
+                expense.participants.forEach(participantId => {
+                    balances[participantId].owes += amountPerPerson;
+                });
+            });
+
+            friends.forEach(friend => {
+                balances[friend.id].balance = balances[friend.id].paid - balances[friend.id].owes;
+            });
+
+            return balances;
+        }
+
+        // Ajouter une dépense
+        function addExpense() {
+            const description = document.getElementById('new-expense-desc').value;
+            const amount = parseFloat(document.getElementById('new-expense-amount').value);
+            const paidBy = parseInt(document.getElementById('new-expense-payer').value);
+            const category = document.getElementById('new-expense-category').value;
+
+            if (description && amount && paidBy) {
+                const expense = {
+                    id: Date.now(),
+                    description,
+                    amount,
+                    paidBy,
+                    date: new Date().toISOString().split('T')[0],
+                    participants: friends.map(f => f.id),
+                    category
+                };
+
+                expenses.push(expense);
+                
+                // Réinitialiser le formulaire
+                document.getElementById('new-expense-desc').value = '';
+                document.getElementById('new-expense-amount').value = '';
+                document.getElementById('new-expense-payer').value = '';
+                
+                // Sauvegarder et mettre à jour
+                saveData();
+                updateExpensesList();
+                updateStats();
+            }
+        }
+
+        // Ajouter une tâche
+        function addTask() {
+            const title = document.getElementById('new-task-title').value;
+            const assignedTo = parseInt(document.getElementById('new-task-assignee').value);
+            const type = document.getElementById('new-task-type').value;
+            const date = document.getElementById('new-task-date').value || new Date().toISOString().split('T')[0];
+
+            if (title && assignedTo) {
+                const task = {
+                    id: Date.now(),
+                    title,
+                    assignedTo,
+                    date,
+                    completed: false,
+                    type,
+                    priority: 'medium'
+                };
+
+                tasks.push(task);
+                
+                // Réinitialiser le formulaire
+                document.getElementById('new-task-title').value = '';
+                document.getElementById('new-task-assignee').value = '';
+                document.getElementById('new-task-date').value = '';
+                
+                // Sauvegarder et mettre à jour
+                saveData();
+                updateTasksList();
+                updateStats();
+            }
+        }
+
+        // Toggle tâche complétée
+        function toggleTask(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (task) {
+                task.completed = !task.completed;
+                // Sauvegarder et mettre à jour
+                saveData();
+                updateTasksList();
+                updateStats();
+            }
+        }
+
+        // Mettre à jour la liste des dépenses
+        function updateExpensesList() {
+            const container = document.getElementById('expenses-list');
+            container.innerHTML = expenses.map(expense => `
+                <div class="bg-white border-2 border-gray-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 card-hover">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-start gap-4 flex-1">
+                            <div class="text-3xl">${expense.category}</div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-lg text-gray-900">${expense.description}</h4>
+                                <div class="flex items-center gap-4 text-sm text-gray-600 mt-2">
+                                    <div class="flex items-center gap-2">
+                                        <span>Payé par:</span>
+                                        <div class="w-8 h-8 rounded-full ${getFriendColor(expense.paidBy)} flex items-center justify-center text-white text-sm font-bold shadow-sm">
+                                            ${getFriendAvatar(expense.paidBy)}
+                                        </div>
+                                        <span class="font-medium">${getFriendName(expense.paidBy)}</span>
+                                    </div>
+                                    <span class="bg-gray-100 px-3 py-1 rounded-full">${expense.date}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                                ${expense.amount.toFixed(2)}€
+                            </div>
+                            <div class="text-sm text-gray-500 bg-gray-50 px-3 py-1 rounded-full mt-1">
+                                ${(expense.amount / expense.participants.length).toFixed(2)}€ / personne
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Mettre à jour la liste des tâches
+        function updateTasksList() {
+            const container = document.getElementById('tasks-list');
+            container.innerHTML = tasks.map(task => `
+                <div class="border-l-4 ${priorityColors[task.priority]} p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 ${task.completed ? 'opacity-75' : ''}">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <button onclick="toggleTask(${task.id})" class="w-10 h-10 rounded-full border-3 flex items-center justify-center transition-all duration-300 ${
+                                task.completed 
+                                    ? 'bg-gradient-to-r from-green-500 to-emerald-500 border-green-500 text-white shadow-lg' 
+                                    : 'border-gray-300 hover:border-green-500 bg-white hover:bg-green-50'
+                            }">
+                                ${task.completed ? '✓' : ''}
+                            </button>
+                            <div class="text-4xl">${taskIcons[task.type]}</div>
+                            <div>
+                                <h4 class="font-semibold text-lg ${task.completed ? 'line-through text-gray-500' : 'text-gray-900'}">
+                                    ${task.title}
+                                </h4>
+                                <div class="flex items-center gap-3 text-sm text-gray-600 mt-1">
+                                    <div class="w-8 h-8 rounded-full ${getFriendColor(task.assignedTo)} flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                                        ${getFriendAvatar(task.assignedTo)}
+                                    </div>
+                                    <span class="font-medium">${getFriendName(task.assignedTo)}</span>
+                                    <span class="bg-gray-100 px-3 py-1 rounded-full">${task.date}</span>
+                                    <span class="px-3 py-1 rounded-full text-xs font-medium ${
+                                        task.priority === 'high' ? 'bg-red-100 text-red-700' :
+                                        task.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                                        'bg-green-100 text-green-700'
+                                    }">
+                                        ${task.priority === 'high' ? '🔥 Urgent' : task.priority === 'medium' ? '⚡ Normal' : '😌 Peinard'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        ${task.completed ? `
+                            <div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-full font-semibold flex items-center gap-2 shadow-lg">
+                                ✓ Terminé !
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Mettre à jour l'onglet balance
+        function updateBalanceTab() {
+            const balances = calculateBalances();
+            
+            // Mise à jour de la grille des balances
+            const balancesGrid = document.getElementById('balances-grid');
+            balancesGrid.innerHTML = friends.map(friend => {
+                const balance = balances[friend.id];
+                return `
+                    <div class="bg-white border-2 border-gray-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 card-hover">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-16 h-16 rounded-full ${friend.color} flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                                ${friend.avatar}
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xl text-gray-900">${friend.name}</h4>
+                                <div class="text-sm text-gray-500">Membre du groupe</div>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                                <span class="text-gray-700 font-medium">💰 A payé:</span>
+                                <span class="font-bold text-green-700">${balance.paid.toFixed(2)}€</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
+                                <span class="text-gray-700 font-medium">💳 Doit:</span>
+                                <span class="font-bold text-orange-700">${balance.owes.toFixed(2)}€</span>
+                            </div>
+                            <div class="border-t-2 border-gray-200 pt-3">
+                                <div class="flex justify-between items-center p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg">
+                                    <span class="font-bold text-gray-800">Balance finale:</span>
+                                    <span class="font-bold text-xl ${balance.balance >= 0 ? 'text-green-600' : 'text-red-600'}">
+                                        ${balance.balance >= 0 ? '+' : ''}${balance.balance.toFixed(2)}€
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Mise à jour des suggestions de remboursement
+            const suggestions = document.getElementById('reimbursement-suggestions');
+            const negativeBalances = Object.entries(balances).filter(([id, balance]) => balance.balance < -1);
+            
+            if (negativeBalances.length === 0) {
+                suggestions.innerHTML = `
+                    <div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white p-4 rounded-xl shadow-lg flex items-center justify-center gap-3">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20,6 9,17 4,12"/></svg>
+                        <span class="font-bold text-lg">🎉 Tout le monde est à jour ! Profitez bien des vacances !</span>
+                    </div>
+                `;
+            } else {
+                suggestions.innerHTML = negativeBalances.map(([id, balance]) => `
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-blue-100 flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full ${getFriendColor(parseInt(id))} flex items-center justify-center text-white font-bold shadow-sm">
+                                ${getFriendAvatar(parseInt(id))}
+                            </div>
+                            <span class="font-semibold text-gray-800">
+                                ${getFriendName(parseInt(id))} doit rembourser
+                            </span>
+                        </div>
+                        <div class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-lg font-bold shadow-lg">
+                            ${Math.abs(balance.balance).toFixed(2)}€
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Mise à jour des statistiques
+            const totalTrip = expenses.reduce((sum, e) => sum + e.amount, 0);
+            const avgPerson = totalTrip / friends.length;
+            const maxImbalance = Math.max(...Object.values(balances).map(b => Math.abs(b.balance)));
+
+            document.getElementById('total-trip').textContent = `${totalTrip.toFixed(2)}€`;
+            document.getElementById('avg-person').textContent = `${avgPerson.toFixed(2)}€`;
+            document.getElementById('max-imbalance').textContent = `${maxImbalance.toFixed(2)}€`;
+        }
+
+        // Mettre à jour les statistiques du header
+        function updateStats() {
+            const totalExpenses = expenses.length;
+            const remainingTasks = tasks.filter(t => !t.completed).length;
+            const totalAmount = expenses.reduce((sum, e) => sum + e.amount, 0);
+
+            document.getElementById('stats-expenses').textContent = totalExpenses;
+            document.getElementById('stats-tasks').textContent = remainingTasks;
+            document.getElementById('stats-total').textContent = `${Math.round(totalAmount)}€`;
+        }
+
+        // Initialiser l'application
+        function init() {
+            // Charger les données sauvegardées
+            loadData();
+            
+            // Mettre à jour l'affichage
+            updateExpensesList();
+            updateTasksList();
+            updateStats();
+            
+            // Définir la date d'aujourd'hui par défaut
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('new-task-date').value = today;
+
+            console.log('🚀 Camp Manager initialisé !');
+        }
+
+        // Démarrer l'application
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
