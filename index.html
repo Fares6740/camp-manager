@@ -305,9 +305,9 @@
             const confirmation = confirm('🚨 ATTENTION ! Êtes-vous sûr de vouloir remettre à zéro toutes les données ?\n\n💥 Cela supprimera définitivement :\n• Toutes les dépenses\n• Toutes les tâches\n• Tout l\'historique\n\nCette action est irréversible !');
             
             if (confirmation) {
-                const doubleConfirmation = confirm('🔥 DERNIÈRE CHANCE !\n\nTapez "OUI" si vous êtes vraiment sûr de vouloir TOUT supprimer !');
+                const finalConfirmation = confirm('🔥 DERNIÈRE CHANCE !\n\nÊtes-vous vraiment sûr de vouloir TOUT supprimer ?\n\nTapez sur OK pour confirmer la suppression totale.');
                 
-                if (doubleConfirmation) {
+                if (finalConfirmation) {
                     try {
                         // Supprimer du localStorage
                         localStorage.removeItem(STORAGE_KEYS.FRIENDS);
@@ -338,17 +338,24 @@
                             { id: 5, title: 'Feu de camp', assignedTo: 6, date: '2025-06-07', completed: false, type: 'other', priority: 'medium' }
                         ];
 
-                        // Sauvegarder et mettre à jour l'affichage
+                        // Sauvegarder les nouvelles données par défaut
                         saveData();
+                        
+                        // Forcer la mise à jour immédiate de tous les affichages
                         updateExpensesList();
                         updateTasksList();
                         updateStats();
-                        if (document.getElementById('content-balance').style.display !== 'none') {
+                        
+                        // Si on est sur l'onglet balance, le mettre à jour aussi
+                        const currentTab = document.querySelector('.tab-content:not(.hidden)');
+                        if (currentTab && currentTab.id === 'content-balance') {
                             updateBalanceTab();
                         }
 
                         // Notification de succès
-                        alert('🎉 Remise à zéro effectuée avec succès !\n\n✅ Toutes les données ont été supprimées\n🔄 Les données d\'exemple ont été restaurées\n💾 Prêt pour un nouveau voyage !');
+                        setTimeout(() => {
+                            alert('🎉 Remise à zéro effectuée avec succès !\n\n✅ Toutes les données ont été supprimées\n🔄 Les données d\'exemple ont été restaurées\n💾 Prêt pour un nouveau voyage !');
+                        }, 100);
                         
                         console.log('🔄 Reset complet effectué !');
                     } catch (error) {
@@ -539,6 +546,60 @@
             }
         }
 
+        // Supprimer une dépense
+        function deleteExpense(expenseId) {
+            const confirmation = confirm('🗑️ Êtes-vous sûr de vouloir supprimer cette dépense ?\n\nCette action est irréversible !');
+            
+            if (confirmation) {
+                // Trouver l'index de la dépense
+                const expenseIndex = expenses.findIndex(expense => expense.id === expenseId);
+                
+                if (expenseIndex !== -1) {
+                    // Supprimer la dépense du tableau
+                    expenses.splice(expenseIndex, 1);
+                    
+                    // Sauvegarder et mettre à jour
+                    saveData();
+                    updateExpensesList();
+                    updateStats();
+                    
+                    // Si on est sur l'onglet balance, le mettre à jour
+                    const currentTab = document.querySelector('.tab-content:not(.hidden)');
+                    if (currentTab && currentTab.id === 'content-balance') {
+                        updateBalanceTab();
+                    }
+                    
+                    console.log('✅ Dépense supprimée :', expenseId);
+                } else {
+                    console.error('❌ Dépense non trouvée :', expenseId);
+                }
+            }
+        }
+
+        // Supprimer une tâche
+        function deleteTask(taskId) {
+            const confirmation = confirm('🗑️ Êtes-vous sûr de vouloir supprimer cette tâche ?\n\nCette action est irréversible !');
+            
+            if (confirmation) {
+                // Trouver l'index de la tâche
+                const taskIndex = tasks.findIndex(task => task.id === taskId);
+                
+                if (taskIndex !== -1) {
+                    // Supprimer la tâche du tableau
+                    tasks.splice(taskIndex, 1);
+                    
+                    // Sauvegarder et mettre à jour
+                    saveData();
+                    updateTasksList();
+                    updateStats();
+                    
+                    console.log('✅ Tâche supprimée :', taskId);
+                } else {
+                    console.error('❌ Tâche non trouvée :', taskId);
+                }
+            }
+        }
+
         // Mettre à jour la liste des dépenses
         function updateExpensesList() {
             const container = document.getElementById('expenses-list');
@@ -561,13 +622,23 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="text-right">
-                            <div class="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-                                ${expense.amount.toFixed(2)}€
+                        <div class="flex items-center gap-3">
+                            <div class="text-right">
+                                <div class="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                                    ${expense.amount.toFixed(2)}€
+                                </div>
+                                <div class="text-sm text-gray-500 bg-gray-50 px-3 py-1 rounded-full mt-1">
+                                    ${(expense.amount / expense.participants.length).toFixed(2)}€ / personne
+                                </div>
                             </div>
-                            <div class="text-sm text-gray-500 bg-gray-50 px-3 py-1 rounded-full mt-1">
-                                ${(expense.amount / expense.participants.length).toFixed(2)}€ / personne
-                            </div>
+                            <button onclick="deleteExpense(${expense.id})" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg transition-all duration-200 hover:scale-110 shadow-lg group" title="Supprimer cette dépense">
+                                <svg class="w-5 h-5 group-hover:rotate-12 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <polyline points="3,6 5,6 21,6"/>
+                                    <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6"/>
+                                    <line x1="10" y1="11" x2="10" y2="17"/>
+                                    <line x1="14" y1="11" x2="14" y2="17"/>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -580,7 +651,7 @@
             container.innerHTML = tasks.map(task => `
                 <div class="border-l-4 ${priorityColors[task.priority]} p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 ${task.completed ? 'opacity-75' : ''}">
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-4 flex-1">
                             <button onclick="toggleTask(${task.id})" class="w-10 h-10 rounded-full border-3 flex items-center justify-center transition-all duration-300 ${
                                 task.completed 
                                     ? 'bg-gradient-to-r from-green-500 to-emerald-500 border-green-500 text-white shadow-lg' 
@@ -589,7 +660,7 @@
                                 ${task.completed ? '✓' : ''}
                             </button>
                             <div class="text-4xl">${taskIcons[task.type]}</div>
-                            <div>
+                            <div class="flex-1">
                                 <h4 class="font-semibold text-lg ${task.completed ? 'line-through text-gray-500' : 'text-gray-900'}">
                                     ${task.title}
                                 </h4>
@@ -609,11 +680,21 @@
                                 </div>
                             </div>
                         </div>
-                        ${task.completed ? `
-                            <div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-full font-semibold flex items-center gap-2 shadow-lg">
-                                ✓ Terminé !
-                            </div>
-                        ` : ''}
+                        <div class="flex items-center gap-3">
+                            ${task.completed ? `
+                                <div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-full font-semibold flex items-center gap-2 shadow-lg">
+                                    ✓ Terminé !
+                                </div>
+                            ` : ''}
+                            <button onclick="deleteTask(${task.id})" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg transition-all duration-200 hover:scale-110 shadow-lg group" title="Supprimer cette tâche">
+                                <svg class="w-5 h-5 group-hover:rotate-12 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <polyline points="3,6 5,6 21,6"/>
+                                    <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6"/>
+                                    <line x1="10" y1="11" x2="10" y2="17"/>
+                                    <line x1="14" y1="11" x2="14" y2="17"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join('');
