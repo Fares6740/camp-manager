@@ -50,15 +50,21 @@
                     </div>
                 </div>
                 <div class="relative z-10">
-                    <div class="flex items-center gap-4">
-                        <div class="bg-white/20 p-3 rounded-xl">
-                            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                            </svg>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-white/20 p-3 rounded-xl">
+                                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h1 class="text-4xl font-bold">Camp Manager</h1>
+                                <p class="text-emerald-100 mt-1 text-lg">Vos vacances camping, organisées comme des pros</p>
+                            </div>
                         </div>
-                        <div>
-                            <h1 class="text-4xl font-bold">Camp Manager</h1>
-                            <p class="text-emerald-100 mt-1 text-lg">Vos vacances camping, organisées comme des pros</p>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold" id="member-count">6</div>
+                            <div class="text-emerald-100 text-sm">Membres du groupe</div>
                         </div>
                     </div>
                     
@@ -82,7 +88,11 @@
 
             <!-- Navigation Premium -->
             <div class="flex border-b border-gray-100 bg-white/50">
-                <button onclick="switchTab('expenses')" id="tab-expenses" class="tab-button flex-1 py-5 px-6 flex items-center justify-center gap-3 font-semibold transition-all duration-300 bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg">
+                <button onclick="switchTab('members')" id="tab-members" class="tab-button flex-1 py-5 px-6 flex items-center justify-center gap-3 font-semibold transition-all duration-300 bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Membres
+                </button>
+                <button onclick="switchTab('expenses')" id="tab-expenses" class="tab-button flex-1 py-5 px-6 flex items-center justify-center gap-3 font-semibold transition-all duration-300 text-gray-600 hover:bg-emerald-50 hover:text-emerald-600">
                     <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
                     Frais Partagés
                 </button>
@@ -98,8 +108,67 @@
 
             <!-- Contenu -->
             <div class="p-8">
+                <!-- Onglet Membres -->
+                <div id="content-members" class="tab-content">
+                    <!-- Ajout de membre Premium -->
+                    <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-2xl border border-purple-200 shadow-inner mb-8">
+                        <h3 class="font-bold text-xl mb-6 flex items-center gap-3 text-gray-800">
+                            <div class="bg-purple-500 p-2 rounded-lg">
+                                <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            </div>
+                            Ajouter un membre
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <input type="text" id="new-member-name" placeholder="Nom du membre" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white shadow-sm">
+                            <select id="new-member-avatar" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white shadow-sm">
+                                <option value="👤">👤 Neutre</option>
+                                <option value="🧑‍💻">🧑‍💻 Développeur</option>
+                                <option value="🎯">🎯 Archer</option>
+                                <option value="🎸">🎸 Musicien</option>
+                                <option value="🎮">🎮 Gamer</option>
+                                <option value="⚽">⚽ Sportif</option>
+                                <option value="🎨">🎨 Artiste</option>
+                                <option value="🍳">🍳 Chef</option>
+                                <option value="📚">📚 Étudiant</option>
+                                <option value="🎭">🎭 Acteur</option>
+                                <option value="🏋️">🏋️ Athlète</option>
+                                <option value="🎪">🎪 Amuseur</option>
+                                <option value="🔬">🔬 Scientifique</option>
+                                <option value="💼">💼 Business</option>
+                                <option value="🌟">🌟 Star</option>
+                                <option value="🦸">🦸 Héros</option>
+                            </select>
+                            <select id="new-member-color" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white shadow-sm">
+                                <option value="bg-gradient-to-br from-blue-400 to-blue-600">🔵 Bleu</option>
+                                <option value="bg-gradient-to-br from-pink-400 to-pink-600">🩷 Rose</option>
+                                <option value="bg-gradient-to-br from-green-400 to-green-600">🟢 Vert</option>
+                                <option value="bg-gradient-to-br from-purple-400 to-purple-600">🟣 Violet</option>
+                                <option value="bg-gradient-to-br from-orange-400 to-orange-600">🟠 Orange</option>
+                                <option value="bg-gradient-to-br from-red-400 to-red-600">🔴 Rouge</option>
+                                <option value="bg-gradient-to-br from-yellow-400 to-yellow-600">🟡 Jaune</option>
+                                <option value="bg-gradient-to-br from-indigo-400 to-indigo-600">🟦 Indigo</option>
+                                <option value="bg-gradient-to-br from-teal-400 to-teal-600">🟢 Turquoise</option>
+                                <option value="bg-gradient-to-br from-gray-400 to-gray-600">⚫ Gris</option>
+                            </select>
+                            <button onclick="addMember()" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-200 flex items-center justify-center gap-2 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Ajouter
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Liste des membres -->
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-xl flex items-center gap-2 text-gray-800">
+                            <svg class="w-6 h-6 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            Équipe du camping
+                        </h3>
+                        <div id="members-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                    </div>
+                </div>
+
                 <!-- Onglet Frais Partagés -->
-                <div id="content-expenses" class="tab-content">
+                <div id="content-expenses" class="tab-content hidden">
                     <!-- Ajout de dépense Premium -->
                     <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-6 rounded-2xl border border-gray-200 shadow-inner mb-8">
                         <h3 class="font-bold text-xl mb-6 flex items-center gap-3 text-gray-800">
@@ -113,12 +182,6 @@
                             <input type="number" id="new-expense-amount" step="0.01" placeholder="Montant €" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 bg-white shadow-sm">
                             <select id="new-expense-payer" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 bg-white shadow-sm">
                                 <option value="">Payé par...</option>
-                                <option value="1">🧑‍💻 Farès</option>
-                                <option value="2">🎯 Anis</option>
-                                <option value="3">🎸 Anthonin</option>
-                                <option value="4">🎮 Quentin</option>
-                                <option value="5">⚽ Natan</option>
-                                <option value="6">🎨 Raphael</option>
                             </select>
                             <select id="new-expense-category" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 bg-white shadow-sm">
                                 <option value="🛒">🛒 Courses</option>
@@ -163,12 +226,6 @@
                             <input type="text" id="new-task-title" placeholder="Titre de la tâche" class="md:col-span-2 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white shadow-sm">
                             <select id="new-task-assignee" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white shadow-sm">
                                 <option value="">Assigné à...</option>
-                                <option value="1">🧑‍💻 Farès</option>
-                                <option value="2">🎯 Anis</option>
-                                <option value="3">🎸 Anthonin</option>
-                                <option value="4">🎮 Quentin</option>
-                                <option value="5">⚽ Natan</option>
-                                <option value="6">🎨 Raphael</option>
                             </select>
                             <select id="new-task-type" class="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white shadow-sm">
                                 <option value="meal">🍳 Repas</option>
@@ -256,121 +313,7 @@
     </div>
 
     <script>
-        // ====== SYSTÈME DE DONNÉES PERSISTANTES ======
-        
-        // Clés de stockage localStorage
-        const STORAGE_KEYS = {
-            FRIENDS: 'camp-manager-friends',
-            EXPENSES: 'camp-manager-expenses',
-            TASKS: 'camp-manager-tasks'
-        };
-
-        // Fonction pour sauvegarder les données
-        function saveData() {
-            try {
-                localStorage.setItem(STORAGE_KEYS.FRIENDS, JSON.stringify(friends));
-                localStorage.setItem(STORAGE_KEYS.EXPENSES, JSON.stringify(expenses));
-                localStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
-                console.log('💾 Données sauvegardées !');
-            } catch (error) {
-                console.error('❌ Erreur lors de la sauvegarde:', error);
-            }
-        }
-
-        // Fonction pour charger les données
-        function loadData() {
-            try {
-                const savedFriends = localStorage.getItem(STORAGE_KEYS.FRIENDS);
-                const savedExpenses = localStorage.getItem(STORAGE_KEYS.EXPENSES);
-                const savedTasks = localStorage.getItem(STORAGE_KEYS.TASKS);
-
-                if (savedFriends) {
-                    friends = JSON.parse(savedFriends);
-                }
-                if (savedExpenses) {
-                    expenses = JSON.parse(savedExpenses);
-                }
-                if (savedTasks) {
-                    tasks = JSON.parse(savedTasks);
-                }
-                console.log('✅ Données chargées !');
-            } catch (error) {
-                console.error('❌ Erreur lors du chargement:', error);
-                // En cas d'erreur, on garde les données par défaut
-            }
-        }
-
-        // Fonction pour remettre à zéro toutes les données
-        function resetAllData() {
-            const confirmation = confirm('🚨 ATTENTION ! Êtes-vous sûr de vouloir remettre à zéro toutes les données ?\n\n💥 Cela supprimera définitivement :\n• Toutes les dépenses\n• Toutes les tâches\n• Tout l\'historique\n\nCette action est irréversible !');
-            
-            if (confirmation) {
-                const finalConfirmation = confirm('🔥 DERNIÈRE CHANCE !\n\nÊtes-vous vraiment sûr de vouloir TOUT supprimer ?\n\nTapez sur OK pour confirmer la suppression totale.');
-                
-                if (finalConfirmation) {
-                    try {
-                        // Supprimer du localStorage
-                        localStorage.removeItem(STORAGE_KEYS.FRIENDS);
-                        localStorage.removeItem(STORAGE_KEYS.EXPENSES);
-                        localStorage.removeItem(STORAGE_KEYS.TASKS);
-
-                        // Remettre les données par défaut
-                        friends = [
-                            { id: 1, name: 'Farès', color: 'bg-gradient-to-br from-blue-400 to-blue-600', avatar: '🧑‍💻' },
-                            { id: 2, name: 'Anis', color: 'bg-gradient-to-br from-pink-400 to-pink-600', avatar: '🎯' },
-                            { id: 3, name: 'Anthonin', color: 'bg-gradient-to-br from-green-400 to-green-600', avatar: '🎸' },
-                            { id: 4, name: 'Quentin', color: 'bg-gradient-to-br from-purple-400 to-purple-600', avatar: '🎮' },
-                            { id: 5, name: 'Natan', color: 'bg-gradient-to-br from-orange-400 to-orange-600', avatar: '⚽' },
-                            { id: 6, name: 'Raphael', color: 'bg-gradient-to-br from-red-400 to-red-600', avatar: '🎨' }
-                        ];
-
-                        expenses = [
-                            { id: 1, description: 'Courses Carrefour', amount: 85.50, paidBy: 1, date: '2025-06-06', participants: [1, 2, 3, 4, 5, 6], category: '🛒' },
-                            { id: 2, description: 'Essence aller', amount: 120.00, paidBy: 2, date: '2025-06-06', participants: [1, 2, 3, 4, 5, 6], category: '⛽' },
-                            { id: 3, description: 'Bières & snacks', amount: 42.30, paidBy: 3, date: '2025-06-06', participants: [1, 2, 3, 4, 5, 6], category: '🍺' }
-                        ];
-
-                        tasks = [
-                            { id: 1, title: 'Petit déjeuner samedi', assignedTo: 1, date: '2025-06-07', completed: false, type: 'meal', priority: 'high' },
-                            { id: 2, title: 'Ranger la tente', assignedTo: 3, date: '2025-06-06', completed: true, type: 'cleaning', priority: 'medium' },
-                            { id: 3, title: 'Courses dimanche', assignedTo: 2, date: '2025-06-08', completed: false, type: 'shopping', priority: 'high' },
-                            { id: 4, title: 'Barbecue soir', assignedTo: 5, date: '2025-06-07', completed: false, type: 'meal', priority: 'high' },
-                            { id: 5, title: 'Feu de camp', assignedTo: 6, date: '2025-06-07', completed: false, type: 'other', priority: 'medium' }
-                        ];
-
-                        // Sauvegarder les nouvelles données par défaut
-                        saveData();
-                        
-                        // Forcer la mise à jour immédiate de tous les affichages
-                        updateExpensesList();
-                        updateTasksList();
-                        updateStats();
-                        
-                        // Si on est sur l'onglet balance, le mettre à jour aussi
-                        const currentTab = document.querySelector('.tab-content:not(.hidden)');
-                        if (currentTab && currentTab.id === 'content-balance') {
-                            updateBalanceTab();
-                        }
-
-                        // Notification de succès
-                        setTimeout(() => {
-                            alert('🎉 Remise à zéro effectuée avec succès !\n\n✅ Toutes les données ont été supprimées\n🔄 Les données d\'exemple ont été restaurées\n💾 Prêt pour un nouveau voyage !');
-                        }, 100);
-                        
-                        console.log('🔄 Reset complet effectué !');
-                    } catch (error) {
-                        console.error('❌ Erreur lors du reset:', error);
-                        alert('❌ Erreur lors de la remise à zéro. Veuillez rafraîchir la page.');
-                    }
-                } else {
-                    alert('😌 Annulé ! Vos données sont en sécurité.');
-                }
-            } else {
-                alert('😌 Annulé ! Vos données sont en sécurité.');
-            }
-        }
-
-        // Données par défaut (utilisées aussi pour le reset)
+        // Données
         let friends = [
             { id: 1, name: 'Farès', color: 'bg-gradient-to-br from-blue-400 to-blue-600', avatar: '🧑‍💻' },
             { id: 2, name: 'Anis', color: 'bg-gradient-to-br from-pink-400 to-pink-600', avatar: '🎯' },
@@ -394,7 +337,7 @@
             { id: 5, title: 'Feu de camp', assignedTo: 6, date: '2025-06-07', completed: false, type: 'other', priority: 'medium' }
         ];
 
-        // Fonctions utilitaires
+        // Utilitaires
         function getFriendName(id) {
             return friends.find(f => f.id === id)?.name || 'Inconnu';
         }
@@ -420,187 +363,278 @@
             low: 'border-l-green-500 bg-green-50'
         };
 
-        // Navigation entre onglets
+        // Sauvegarde/Chargement
+        function saveData() {
+            try {
+                localStorage.setItem('camp-friends', JSON.stringify(friends));
+                localStorage.setItem('camp-expenses', JSON.stringify(expenses));
+                localStorage.setItem('camp-tasks', JSON.stringify(tasks));
+            } catch (error) {
+                console.error('Erreur sauvegarde:', error);
+            }
+        }
+
+        function loadData() {
+            try {
+                const savedFriends = localStorage.getItem('camp-friends');
+                const savedExpenses = localStorage.getItem('camp-expenses');
+                const savedTasks = localStorage.getItem('camp-tasks');
+
+                if (savedFriends) friends = JSON.parse(savedFriends);
+                if (savedExpenses) expenses = JSON.parse(savedExpenses);
+                if (savedTasks) tasks = JSON.parse(savedTasks);
+            } catch (error) {
+                console.error('Erreur chargement:', error);
+            }
+        }
+
+        // Gestion membres
+        function addMember() {
+            const name = document.getElementById('new-member-name').value.trim();
+            const avatar = document.getElementById('new-member-avatar').value;
+            const color = document.getElementById('new-member-color').value;
+
+            if (!name) {
+                alert('❌ Entrez un nom !');
+                return;
+            }
+
+            if (friends.find(f => f.name.toLowerCase() === name.toLowerCase())) {
+                alert('❌ Ce nom existe déjà !');
+                return;
+            }
+
+            const member = {
+                id: Date.now(),
+                name,
+                avatar,
+                color
+            };
+
+            friends.push(member);
+            
+            document.getElementById('new-member-name').value = '';
+            document.getElementById('new-member-avatar').value = '👤';
+            document.getElementById('new-member-color').value = 'bg-gradient-to-br from-blue-400 to-blue-600';
+            
+            saveData();
+            updateAll();
+        }
+
+        function deleteMember(memberId) {
+            const member = friends.find(f => f.id === memberId);
+            if (!member) return;
+
+            const memberExpenses = expenses.filter(e => e.paidBy === memberId || e.participants.includes(memberId));
+            const memberTasks = tasks.filter(t => t.assignedTo === memberId);
+            
+            let message = `Supprimer ${member.name} ?`;
+            if (memberExpenses.length > 0 || memberTasks.length > 0) {
+                message += `\n\n⚠️ Cela supprimera aussi :`;
+                if (memberExpenses.length > 0) message += `\n• ${memberExpenses.length} dépense(s)`;
+                if (memberTasks.length > 0) message += `\n• ${memberTasks.length} tâche(s)`;
+            }
+
+            if (!confirm(message)) return;
+
+            friends = friends.filter(f => f.id !== memberId);
+            expenses = expenses.filter(e => {
+                if (e.paidBy === memberId) return false;
+                if (e.participants.includes(memberId)) {
+                    e.participants = e.participants.filter(p => p !== memberId);
+                    if (e.participants.length === 0) return false;
+                }
+                return true;
+            });
+            tasks = tasks.filter(t => t.assignedTo !== memberId);
+
+            saveData();
+            updateAll();
+        }
+
+        function editMember(memberId) {
+            const member = friends.find(f => f.id === memberId);
+            if (!member) return;
+
+            const newName = prompt(`Nouveau nom pour ${member.name} :`, member.name);
+            if (!newName || newName.trim() === '') return;
+
+            const trimmedName = newName.trim();
+            if (friends.find(f => f.name.toLowerCase() === trimmedName.toLowerCase() && f.id !== memberId)) {
+                alert('❌ Ce nom existe déjà !');
+                return;
+            }
+
+            member.name = trimmedName;
+            saveData();
+            updateAll();
+        }
+
+        // Gestion dépenses
+        function addExpense() {
+            const description = document.getElementById('new-expense-desc').value.trim();
+            const amount = parseFloat(document.getElementById('new-expense-amount').value);
+            const paidBy = parseInt(document.getElementById('new-expense-payer').value);
+            const category = document.getElementById('new-expense-category').value;
+
+            if (!description) {
+                alert('❌ Entrez une description !');
+                return;
+            }
+            if (!amount || amount <= 0) {
+                alert('❌ Montant invalide !');
+                return;
+            }
+            if (!paidBy) {
+                alert('❌ Sélectionnez qui a payé !');
+                return;
+            }
+
+            const expense = {
+                id: Date.now(),
+                description,
+                amount,
+                paidBy,
+                date: new Date().toISOString().split('T')[0],
+                participants: friends.map(f => f.id),
+                category
+            };
+
+            expenses.push(expense);
+            
+            document.getElementById('new-expense-desc').value = '';
+            document.getElementById('new-expense-amount').value = '';
+            document.getElementById('new-expense-payer').value = '';
+            
+            saveData();
+            updateExpensesList();
+            updateStats();
+        }
+
+        function deleteExpense(expenseId) {
+            if (!confirm('Supprimer cette dépense ?')) return;
+            
+            expenses = expenses.filter(e => e.id !== expenseId);
+            saveData();
+            updateExpensesList();
+            updateStats();
+            
+            const currentTab = document.querySelector('.tab-content:not(.hidden)');
+            if (currentTab && currentTab.id === 'content-balance') {
+                updateBalanceTab();
+            }
+        }
+
+        // Gestion tâches
+        function addTask() {
+            const title = document.getElementById('new-task-title').value.trim();
+            const assignedTo = parseInt(document.getElementById('new-task-assignee').value);
+            const type = document.getElementById('new-task-type').value;
+            const date = document.getElementById('new-task-date').value || new Date().toISOString().split('T')[0];
+
+            if (!title) {
+                alert('❌ Entrez un titre !');
+                return;
+            }
+            if (!assignedTo) {
+                alert('❌ Assignez la tâche !');
+                return;
+            }
+
+            const task = {
+                id: Date.now(),
+                title,
+                assignedTo,
+                date,
+                completed: false,
+                type,
+                priority: 'medium'
+            };
+
+            tasks.push(task);
+            
+            document.getElementById('new-task-title').value = '';
+            document.getElementById('new-task-assignee').value = '';
+            document.getElementById('new-task-date').value = '';
+            
+            saveData();
+            updateTasksList();
+            updateStats();
+        }
+
+        function toggleTask(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (task) {
+                task.completed = !task.completed;
+                saveData();
+                updateTasksList();
+                updateStats();
+            }
+        }
+
+        function deleteTask(taskId) {
+            if (!confirm('Supprimer cette tâche ?')) return;
+            
+            tasks = tasks.filter(t => t.id !== taskId);
+            saveData();
+            updateTasksList();
+            updateStats();
+        }
+
+        // Navigation
         function switchTab(tabName) {
-            // Cacher tous les contenus
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.add('hidden');
             });
 
-            // Retirer la classe active de tous les boutons
             document.querySelectorAll('.tab-button').forEach(button => {
                 button.className = 'tab-button flex-1 py-5 px-6 flex items-center justify-center gap-3 font-semibold transition-all duration-300 text-gray-600 hover:bg-emerald-50 hover:text-emerald-600';
             });
 
-            // Afficher le contenu sélectionné
             document.getElementById(`content-${tabName}`).classList.remove('hidden');
-
-            // Activer le bouton sélectionné
             document.getElementById(`tab-${tabName}`).className = 'tab-button flex-1 py-5 px-6 flex items-center justify-center gap-3 font-semibold transition-all duration-300 bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg';
 
-            // Mettre à jour le contenu si nécessaire
             if (tabName === 'balance') {
                 updateBalanceTab();
             }
         }
 
-        // Calcul des balances
-        function calculateBalances() {
-            const balances = {};
-            friends.forEach(friend => {
-                balances[friend.id] = { paid: 0, owes: 0, balance: 0 };
-            });
+        // Mise à jour affichages
+        function updateMembersList() {
+            const container = document.getElementById('members-list');
+            container.innerHTML = friends.map(member => `
+                <div class="bg-white border-2 border-gray-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 card-hover">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-20 h-20 rounded-full ${member.color} flex items-center justify-center text-white text-3xl font-bold shadow-lg mb-4">
+                            ${member.avatar}
+                        </div>
+                        <h4 class="font-bold text-xl text-gray-900 mb-2">${member.name}</h4>
+                        <div class="text-sm text-gray-500 mb-4">Membre #${member.id}</div>
+                        
+                        <div class="w-full space-y-2 mb-4">
+                            <div class="bg-emerald-50 p-2 rounded-lg flex justify-between items-center">
+                                <span class="text-sm text-gray-600">💰 Dépenses:</span>
+                                <span class="font-semibold text-emerald-700">${expenses.filter(e => e.paidBy === member.id).length}</span>
+                            </div>
+                            <div class="bg-blue-50 p-2 rounded-lg flex justify-between items-center">
+                                <span class="text-sm text-gray-600">📋 Tâches:</span>
+                                <span class="font-semibold text-blue-700">${tasks.filter(t => t.assignedTo === member.id).length}</span>
+                            </div>
+                        </div>
 
-            expenses.forEach(expense => {
-                const payer = expense.paidBy;
-                const participantCount = expense.participants.length;
-                const amountPerPerson = expense.amount / participantCount;
-
-                balances[payer].paid += expense.amount;
-
-                expense.participants.forEach(participantId => {
-                    balances[participantId].owes += amountPerPerson;
-                });
-            });
-
-            friends.forEach(friend => {
-                balances[friend.id].balance = balances[friend.id].paid - balances[friend.id].owes;
-            });
-
-            return balances;
+                        <div class="flex gap-2 w-full">
+                            <button onclick="editMember(${member.id})" class="flex-1 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white px-3 py-2 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 text-sm">
+                                ✏️ Modifier
+                            </button>
+                            <button onclick="deleteMember(${member.id})" class="flex-1 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-3 py-2 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 text-sm">
+                                🗑️ Supprimer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        // Ajouter une dépense
-        function addExpense() {
-            const description = document.getElementById('new-expense-desc').value;
-            const amount = parseFloat(document.getElementById('new-expense-amount').value);
-            const paidBy = parseInt(document.getElementById('new-expense-payer').value);
-            const category = document.getElementById('new-expense-category').value;
-
-            if (description && amount && paidBy) {
-                const expense = {
-                    id: Date.now(),
-                    description,
-                    amount,
-                    paidBy,
-                    date: new Date().toISOString().split('T')[0],
-                    participants: friends.map(f => f.id),
-                    category
-                };
-
-                expenses.push(expense);
-                
-                // Réinitialiser le formulaire
-                document.getElementById('new-expense-desc').value = '';
-                document.getElementById('new-expense-amount').value = '';
-                document.getElementById('new-expense-payer').value = '';
-                
-                // Sauvegarder et mettre à jour
-                saveData();
-                updateExpensesList();
-                updateStats();
-            }
-        }
-
-        // Ajouter une tâche
-        function addTask() {
-            const title = document.getElementById('new-task-title').value;
-            const assignedTo = parseInt(document.getElementById('new-task-assignee').value);
-            const type = document.getElementById('new-task-type').value;
-            const date = document.getElementById('new-task-date').value || new Date().toISOString().split('T')[0];
-
-            if (title && assignedTo) {
-                const task = {
-                    id: Date.now(),
-                    title,
-                    assignedTo,
-                    date,
-                    completed: false,
-                    type,
-                    priority: 'medium'
-                };
-
-                tasks.push(task);
-                
-                // Réinitialiser le formulaire
-                document.getElementById('new-task-title').value = '';
-                document.getElementById('new-task-assignee').value = '';
-                document.getElementById('new-task-date').value = '';
-                
-                // Sauvegarder et mettre à jour
-                saveData();
-                updateTasksList();
-                updateStats();
-            }
-        }
-
-        // Toggle tâche complétée
-        function toggleTask(taskId) {
-            const task = tasks.find(t => t.id === taskId);
-            if (task) {
-                task.completed = !task.completed;
-                // Sauvegarder et mettre à jour
-                saveData();
-                updateTasksList();
-                updateStats();
-            }
-        }
-
-        // Supprimer une dépense
-        function deleteExpense(expenseId) {
-            const confirmation = confirm('🗑️ Êtes-vous sûr de vouloir supprimer cette dépense ?\n\nCette action est irréversible !');
-            
-            if (confirmation) {
-                // Trouver l'index de la dépense
-                const expenseIndex = expenses.findIndex(expense => expense.id === expenseId);
-                
-                if (expenseIndex !== -1) {
-                    // Supprimer la dépense du tableau
-                    expenses.splice(expenseIndex, 1);
-                    
-                    // Sauvegarder et mettre à jour
-                    saveData();
-                    updateExpensesList();
-                    updateStats();
-                    
-                    // Si on est sur l'onglet balance, le mettre à jour
-                    const currentTab = document.querySelector('.tab-content:not(.hidden)');
-                    if (currentTab && currentTab.id === 'content-balance') {
-                        updateBalanceTab();
-                    }
-                    
-                    console.log('✅ Dépense supprimée :', expenseId);
-                } else {
-                    console.error('❌ Dépense non trouvée :', expenseId);
-                }
-            }
-        }
-
-        // Supprimer une tâche
-        function deleteTask(taskId) {
-            const confirmation = confirm('🗑️ Êtes-vous sûr de vouloir supprimer cette tâche ?\n\nCette action est irréversible !');
-            
-            if (confirmation) {
-                // Trouver l'index de la tâche
-                const taskIndex = tasks.findIndex(task => task.id === taskId);
-                
-                if (taskIndex !== -1) {
-                    // Supprimer la tâche du tableau
-                    tasks.splice(taskIndex, 1);
-                    
-                    // Sauvegarder et mettre à jour
-                    saveData();
-                    updateTasksList();
-                    updateStats();
-                    
-                    console.log('✅ Tâche supprimée :', taskId);
-                } else {
-                    console.error('❌ Tâche non trouvée :', taskId);
-                }
-            }
-        }
-
-        // Mettre à jour la liste des dépenses
         function updateExpensesList() {
             const container = document.getElementById('expenses-list');
             container.innerHTML = expenses.map(expense => `
@@ -631,13 +665,8 @@
                                     ${(expense.amount / expense.participants.length).toFixed(2)}€ / personne
                                 </div>
                             </div>
-                            <button onclick="deleteExpense(${expense.id})" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg transition-all duration-200 hover:scale-110 shadow-lg group" title="Supprimer cette dépense">
-                                <svg class="w-5 h-5 group-hover:rotate-12 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                    <polyline points="3,6 5,6 21,6"/>
-                                    <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6"/>
-                                    <line x1="10" y1="11" x2="10" y2="17"/>
-                                    <line x1="14" y1="11" x2="14" y2="17"/>
-                                </svg>
+                            <button onclick="deleteExpense(${expense.id})" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg transition-all duration-200 hover:scale-110 shadow-lg">
+                                🗑️
                             </button>
                         </div>
                     </div>
@@ -645,7 +674,6 @@
             `).join('');
         }
 
-        // Mettre à jour la liste des tâches
         function updateTasksList() {
             const container = document.getElementById('tasks-list');
             container.innerHTML = tasks.map(task => `
@@ -681,18 +709,9 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-3">
-                            ${task.completed ? `
-                                <div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-full font-semibold flex items-center gap-2 shadow-lg">
-                                    ✓ Terminé !
-                                </div>
-                            ` : ''}
-                            <button onclick="deleteTask(${task.id})" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg transition-all duration-200 hover:scale-110 shadow-lg group" title="Supprimer cette tâche">
-                                <svg class="w-5 h-5 group-hover:rotate-12 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                    <polyline points="3,6 5,6 21,6"/>
-                                    <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6"/>
-                                    <line x1="10" y1="11" x2="10" y2="17"/>
-                                    <line x1="14" y1="11" x2="14" y2="17"/>
-                                </svg>
+                            ${task.completed ? `<div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-full font-semibold">✓ Terminé !</div>` : ''}
+                            <button onclick="deleteTask(${task.id})" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg transition-all duration-200 hover:scale-110 shadow-lg">
+                                🗑️
                             </button>
                         </div>
                     </div>
@@ -700,11 +719,58 @@
             `).join('');
         }
 
-        // Mettre à jour l'onglet balance
+        function updateSelectOptions() {
+            const memberOptions = friends.map(f => `<option value="${f.id}">${f.avatar} ${f.name}</option>`).join('');
+            
+            const expenseSelect = document.getElementById('new-expense-payer');
+            if (expenseSelect) {
+                const current = expenseSelect.value;
+                expenseSelect.innerHTML = '<option value="">Payé par...</option>' + memberOptions;
+                if (friends.find(f => f.id == current)) expenseSelect.value = current;
+            }
+            
+            const taskSelect = document.getElementById('new-task-assignee');
+            if (taskSelect) {
+                const current = taskSelect.value;
+                taskSelect.innerHTML = '<option value="">Assigné à...</option>' + memberOptions;
+                if (friends.find(f => f.id == current)) taskSelect.value = current;
+            }
+        }
+
+        function calculateBalances() {
+            const balances = {};
+            friends.forEach(friend => {
+                balances[friend.id] = { paid: 0, owes: 0, balance: 0 };
+            });
+
+            expenses.forEach(expense => {
+                const payer = expense.paidBy;
+                const participantCount = expense.participants.length;
+                const amountPerPerson = expense.amount / participantCount;
+
+                if (balances[payer]) {
+                    balances[payer].paid += expense.amount;
+                }
+
+                expense.participants.forEach(participantId => {
+                    if (balances[participantId]) {
+                        balances[participantId].owes += amountPerPerson;
+                    }
+                });
+            });
+
+            friends.forEach(friend => {
+                if (balances[friend.id]) {
+                    balances[friend.id].balance = balances[friend.id].paid - balances[friend.id].owes;
+                }
+            });
+
+            return balances;
+        }
+
         function updateBalanceTab() {
             const balances = calculateBalances();
             
-            // Mise à jour de la grille des balances
             const balancesGrid = document.getElementById('balances-grid');
             balancesGrid.innerHTML = friends.map(friend => {
                 const balance = balances[friend.id];
@@ -730,7 +796,7 @@
                             </div>
                             <div class="border-t-2 border-gray-200 pt-3">
                                 <div class="flex justify-between items-center p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg">
-                                    <span class="font-bold text-gray-800">Balance finale:</span>
+                                    <span class="font-bold text-gray-800">Balance:</span>
                                     <span class="font-bold text-xl ${balance.balance >= 0 ? 'text-green-600' : 'text-red-600'}">
                                         ${balance.balance >= 0 ? '+' : ''}${balance.balance.toFixed(2)}€
                                     </span>
@@ -741,15 +807,13 @@
                 `;
             }).join('');
 
-            // Mise à jour des suggestions de remboursement
             const suggestions = document.getElementById('reimbursement-suggestions');
             const negativeBalances = Object.entries(balances).filter(([id, balance]) => balance.balance < -1);
             
             if (negativeBalances.length === 0) {
                 suggestions.innerHTML = `
-                    <div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white p-4 rounded-xl shadow-lg flex items-center justify-center gap-3">
-                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20,6 9,17 4,12"/></svg>
-                        <span class="font-bold text-lg">🎉 Tout le monde est à jour ! Profitez bien des vacances !</span>
+                    <div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white p-4 rounded-xl shadow-lg text-center">
+                        🎉 Tout le monde est à jour ! Profitez bien des vacances !
                     </div>
                 `;
             } else {
@@ -770,9 +834,8 @@
                 `).join('');
             }
 
-            // Mise à jour des statistiques
             const totalTrip = expenses.reduce((sum, e) => sum + e.amount, 0);
-            const avgPerson = totalTrip / friends.length;
+            const avgPerson = friends.length > 0 ? totalTrip / friends.length : 0;
             const maxImbalance = Math.max(...Object.values(balances).map(b => Math.abs(b.balance)));
 
             document.getElementById('total-trip').textContent = `${totalTrip.toFixed(2)}€`;
@@ -780,35 +843,79 @@
             document.getElementById('max-imbalance').textContent = `${maxImbalance.toFixed(2)}€`;
         }
 
-        // Mettre à jour les statistiques du header
         function updateStats() {
-            const totalExpenses = expenses.length;
-            const remainingTasks = tasks.filter(t => !t.completed).length;
-            const totalAmount = expenses.reduce((sum, e) => sum + e.amount, 0);
-
-            document.getElementById('stats-expenses').textContent = totalExpenses;
-            document.getElementById('stats-tasks').textContent = remainingTasks;
-            document.getElementById('stats-total').textContent = `${Math.round(totalAmount)}€`;
+            document.getElementById('stats-expenses').textContent = expenses.length;
+            document.getElementById('stats-tasks').textContent = tasks.filter(t => !t.completed).length;
+            document.getElementById('stats-total').textContent = `${Math.round(expenses.reduce((sum, e) => sum + e.amount, 0))}€`;
+            document.getElementById('member-count').textContent = friends.length;
         }
 
-        // Initialiser l'application
-        function init() {
-            // Charger les données sauvegardées
-            loadData();
-            
-            // Mettre à jour l'affichage
+        function updateAll() {
+            updateMembersList();
             updateExpensesList();
             updateTasksList();
             updateStats();
+            updateSelectOptions();
+        }
+
+        function resetAllData() {
+            if (!confirm('🚨 TOUT supprimer ? (irréversible)')) return;
+            if (!confirm('🔥 DERNIÈRE CHANCE ! Vraiment tout supprimer ?')) return;
+
+            try {
+                localStorage.clear();
+                
+                friends = [
+                    { id: 1, name: 'Farès', color: 'bg-gradient-to-br from-blue-400 to-blue-600', avatar: '🧑‍💻' },
+                    { id: 2, name: 'Anis', color: 'bg-gradient-to-br from-pink-400 to-pink-600', avatar: '🎯' },
+                    { id: 3, name: 'Anthonin', color: 'bg-gradient-to-br from-green-400 to-green-600', avatar: '🎸' },
+                    { id: 4, name: 'Quentin', color: 'bg-gradient-to-br from-purple-400 to-purple-600', avatar: '🎮' },
+                    { id: 5, name: 'Natan', color: 'bg-gradient-to-br from-orange-400 to-orange-600', avatar: '⚽' },
+                    { id: 6, name: 'Raphael', color: 'bg-gradient-to-br from-red-400 to-red-600', avatar: '🎨' }
+                ];
+
+                expenses = [
+                    { id: 1, description: 'Courses Carrefour', amount: 85.50, paidBy: 1, date: '2025-06-06', participants: [1, 2, 3, 4, 5, 6], category: '🛒' },
+                    { id: 2, description: 'Essence aller', amount: 120.00, paidBy: 2, date: '2025-06-06', participants: [1, 2, 3, 4, 5, 6], category: '⛽' },
+                    { id: 3, description: 'Bières & snacks', amount: 42.30, paidBy: 3, date: '2025-06-06', participants: [1, 2, 3, 4, 5, 6], category: '🍺' }
+                ];
+
+                tasks = [
+                    { id: 1, title: 'Petit déjeuner samedi', assignedTo: 1, date: '2025-06-07', completed: false, type: 'meal', priority: 'high' },
+                    { id: 2, title: 'Ranger la tente', assignedTo: 3, date: '2025-06-06', completed: true, type: 'cleaning', priority: 'medium' },
+                    { id: 3, title: 'Courses dimanche', assignedTo: 2, date: '2025-06-08', completed: false, type: 'shopping', priority: 'high' },
+                    { id: 4, title: 'Barbecue soir', assignedTo: 5, date: '2025-06-07', completed: false, type: 'meal', priority: 'high' },
+                    { id: 5, title: 'Feu de camp', assignedTo: 6, date: '2025-06-07', completed: false, type: 'other', priority: 'medium' }
+                ];
+
+                saveData();
+                updateAll();
+                
+                const currentTab = document.querySelector('.tab-content:not(.hidden)');
+                if (currentTab && currentTab.id === 'content-balance') {
+                    updateBalanceTab();
+                }
+
+                setTimeout(() => {
+                    alert('🎉 Reset terminé ! Données d\'exemple restaurées.');
+                }, 100);
+            } catch (error) {
+                console.error('Erreur reset:', error);
+                alert('❌ Erreur lors du reset');
+            }
+        }
+
+        // Initialisation
+        function init() {
+            loadData();
+            updateAll();
             
-            // Définir la date d'aujourd'hui par défaut
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('new-task-date').value = today;
 
             console.log('🚀 Camp Manager initialisé !');
         }
 
-        // Démarrer l'application
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
